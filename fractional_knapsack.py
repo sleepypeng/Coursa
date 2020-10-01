@@ -1,36 +1,35 @@
-# Uses python3
-import sys
-import numpy as np
+n,w=map(int,input().split())
+ratiolist=[]
+values=[]
+weights=[]
+maxval=0
+for _ in range(n) :
+    v,wt=map(int,input().split())
+    values.append(v)
+    weights.append(wt)
+    r=v/wt
+    ratiolist.append(r)
 
-def get_optimal_value(capacity, weights, values):
-    value = 0
-    n = len(weights)
-    i = 0
-    l = [0] * n
-    for i in range(n):
-        l[i] = values[i] / weights[i]
-        i += 0
-    b = np.argsort(l)
-    m = b.tolist()
-    m.reverse()
-    while capacity > 0:
-        if capacity >= weights[m[0]]:
-            value += values[m[0]]
-            capacity -= weights[m[0]]
-        elif capacity < weights[m[0]]:
-            value += capacity * values[m[0]] / weights[m[0]]
-            capacity = 0
-        else:
-            print("capacity is wrong")
-        del m[0]
-        if len(m) == 0:
-            break
-    return value
+while True :
+    if not ratiolist:
+        print("{:.4f}".format(maxval))
+        break
+    r=max(ratiolist)
+    pos=ratiolist.index(r)
+    wt=weights[pos]
+    v=values[pos]
+    if(w>=wt):
+        maxval+=v
+        weights.pop(pos)
+        values.pop(pos)
+        ratiolist.pop(pos)
+        w=w-wt
 
-if __name__ == "__main__":
-    data = list(map(int, sys.stdin.read().split()))
-    n, capacity = data[0:2]
-    values = data[2:(2 * n + 2):2]
-    weights = data[3:(2 * n + 2):2]
-    opt_value = get_optimal_value(capacity, weights, values)
-    print("{:.10f}".format(opt_value))
+    elif(w>0) :
+        fract=w/wt
+        maxval+=(v*fract)
+        print("{:.4f}".format(maxval))
+        break
+    else:
+        print("{:.4f}".format(maxval))
+        break
